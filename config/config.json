@@ -24,6 +24,11 @@
             "command": "!kevin",
             "images": "images/kevin",
             "enabled": true
+        },
+        {
+            "command": "!jazz",
+            "images": "images/jazz",
+            "enabled": true
         }
     ]
 }

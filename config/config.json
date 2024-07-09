@@ -29,6 +29,11 @@
             "command": "!jazz",
             "images": "images/jazz",
             "enabled": true
+        },
+        {
+            "command": "!ovulating",
+            "images": "images/ovulating",
+            "enabled": true
         }
     ]
 }

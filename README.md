@@ -1,6 +1,6 @@
 <div align="center">
-    <h2>the-master-jaker</h2>
-    <p> A Discord bot dedicated to my dear friend Jake.</p>
+    <h2>Project Friendship</h2>
+    <p> A Discord bot dedicated to my friends</p>
     <a href="https://discord.com/oauth2/authorize?client_id=1259293014854074451&permissions=0&integration_type=0&scope=bot">
         <img src="https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white" alt="Discord">
     </a>

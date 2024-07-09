@@ -1,4 +1,4 @@
-module github.com/KevinFagan/the-master-jaker
+module github.com/KevinFagan/project-friendship
 
 go 1.22.5
 

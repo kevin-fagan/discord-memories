@@ -1,0 +1,19 @@
+{
+    "channels": [
+        {
+            "id": "1258568116154142814",
+            "enabled": true
+        },
+        {
+            "id": "1255566989963952148",
+            "enabled": true
+        }
+    ],
+    "commands": [
+        {
+            "command": "!jake",
+            "images": "images/jake",
+            "enabled": true
+        }
+    ]
+}

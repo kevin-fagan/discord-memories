@@ -24,6 +24,6 @@
             "command": "!kevin",
             "images": "images/kevin",
             "enabled": true
-        },
+        }
     ]
 }

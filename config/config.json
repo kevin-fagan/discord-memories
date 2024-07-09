@@ -20,5 +20,10 @@
             "images": "images/brandon",
             "enabled": true
         },
+        {
+            "command": "!kevin",
+            "images": "images/kevin",
+            "enabled": true
+        },
     ]
 }

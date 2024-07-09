@@ -14,6 +14,11 @@
             "command": "!jake",
             "images": "images/jake",
             "enabled": true
-        }
+        },
+        {
+            "command": "!brandon",
+            "images": "images/brandon",
+            "enabled": true
+        },
     ]
 }

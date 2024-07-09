@@ -83,7 +83,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 	if err != nil {
 		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("error selecting photo: %s", err))
 	}
-	file, err := os.Open(filepath.Join(cmd.Images, photo))
+	imagePath := filepath.Join(cmd.Images, photo)
+	file, err := os.Open(imagePath)
 	if err != nil {
 		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("error reading photo: %s", err))
 	}
@@ -93,7 +94,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 	_, err = s.ChannelMessageSendComplex(m.ChannelID, &discordgo.MessageSend{
 		Files: []*discordgo.File{
 			{
-				Name:   "Random Photo",
+				Name:   imagePath,
 				Reader: file,
 			},
 		},

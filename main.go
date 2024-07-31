@@ -2,56 +2,70 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"os"
 	"os/signal"
 	"path/filepath"
 	"strings"
 	"syscall"
-	"time"
 
-	"github.com/KevinFagan/project-friendship/config"
+	"github.com/KevinFagan/discord-memories/config"
+	s3helper "github.com/KevinFagan/discord-memories/storage"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/bwmarrin/discordgo"
-)
-
-var (
-	discordToken = os.Getenv("DISCORD_BOT_TOKEN")
+	"github.com/sirupsen/logrus"
 )
 
 const (
-	configFile = "config/config.json"
+	pathArg    = 1
+	uploadArg  = 2
+	configFile = "memories.json"
 )
 
 func main() {
-	// Load configuration
-	config, err := config.ReadConfig(configFile)
+	config, err := config.LoadConfig(configFile)
 	if err != nil {
-		fmt.Printf("error reading config: %s\n", err)
-		return
+		logrus.Fatalf("error reading config: %s\n", err)
+	}
+
+	// Establishing S3 bucket Session
+	sess, err := session.NewSession(&aws.Config{
+		Region:      &config.Storage.Region,
+		Endpoint:    &config.Storage.Endpoint,
+		Credentials: credentials.NewStaticCredentials(config.Tokens.S3AccessKey, config.Tokens.S3SecretKey, ""),
+	})
+	if err != nil {
+		logrus.Fatalf("error creating session: %s\n", err)
+	}
+
+	service := s3.New(sess)
+	err = s3helper.Sync(service, config, config.Storage.Bucket)
+	if err != nil {
+		logrus.Fatalf("error syncing folders: %s\n", err)
 	}
 
 	// Create a new Discord session using the provided bot token
-	dg, err := discordgo.New("Bot " + discordToken)
+	dg, err := discordgo.New("Bot " + config.Tokens.DiscordToken)
 	if err != nil {
-		fmt.Printf("error creating Discord session: %s\n", err)
-		return
+		logrus.Fatalf("error creating Discord session: %s\n", err)
 	}
 
 	// Register the messageCreate func as a callback for MessageCreate events.
 	dg.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) {
-		messageCreate(s, m, config)
+		messageCreate(s, m, config, service)
 	})
 	dg.Identify.Intents = discordgo.IntentsGuildMessages
 
 	// Open a websocket connection to Discord and begin listening
 	err = dg.Open()
 	if err != nil {
-		fmt.Printf("error opening connection: %s\n", err)
-		return
+		logrus.Fatalf("error opening connection: %s\n", err)
 	}
 
 	// Wait here until CTRL-C or other term signal is received
-	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
+	logrus.Info("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
@@ -59,58 +73,89 @@ func main() {
 	dg.Close()
 }
 
-func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config) {
+func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config, service *s3.S3) {
 	// Ignore all messages created by the bot itself
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
-
-	reqCmd := strings.Split(m.Content, " ")[0]
-	cmd, cmdAllowed := c.CommandAllowed(reqCmd)
-
-	// Checking if the channel and the command is allowed
-	if !c.ChannelAllowed(m.ChannelID) {
-		s.ChannelMessageSend(m.ChannelID, "This channel is not allowed to use this bot.")
+	// Ignore all messages that do not start with the command prefix
+	if !strings.HasPrefix(m.Content, "!memories") {
 		return
 	}
-	if !cmdAllowed {
-		s.ChannelMessageSend(m.ChannelID, "This command is either not allowed or does not exist.")
+	args := strings.Split(strings.TrimSpace(m.Content), " ")
+	if len(args) != 2 && len(args) != 3 {
+		return
+	}
+	// Checking Sever/Channel permissions
+	if !c.BotAllowed(m.GuildID, m.ChannelID) {
+		s.ChannelMessageSend(m.ChannelID, "This channel or server is not allowed to use this bot.")
+		return
+	}
+	// Checking argument permissions
+	if !c.ArgumentAllowed(args[pathArg]) {
+		s.ChannelMessageSend(m.ChannelID, "This argument is either not allowed or does not exist.")
 		return
 	}
 
-	// Selecting and reading random photo based of the provided command
-	photo, err := selectPhoto(cmd.Images)
-	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("error selecting photo: %s", err))
-	}
-	imagePath := filepath.Join(cmd.Images, photo)
-	file, err := os.Open(imagePath)
-	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("error reading photo: %s", err))
-	}
-	defer file.Close()
+	if len(args) == 2 {
+		object, name, err := s3helper.GetRandomObjectUnderPrefix(service, c.Storage.Bucket, c.Arguments[args[pathArg]].Path)
+		if err != nil {
+			s.ChannelMessageSend(m.ChannelID, err.Error())
+			logrus.WithFields(logrus.Fields{
+				"error":  err,
+				"author": m.Author,
+			}).Error("error while retrieving an object")
+			return
+		}
 
-	// Sending the selected photo to the channel
-	_, err = s.ChannelMessageSendComplex(m.ChannelID, &discordgo.MessageSend{
-		Files: []*discordgo.File{
-			{
-				Name:   imagePath,
-				Reader: file,
+		_, err = s.ChannelMessageSendComplex(m.ChannelID, &discordgo.MessageSend{
+			Files: []*discordgo.File{
+				{
+					Name:   name,
+					Reader: object.Body,
+				},
 			},
-		},
-	})
+		})
 
-	if err != nil {
-		fmt.Printf("error sending message: %s", err)
+		if err != nil {
+			logrus.WithFields(logrus.Fields{
+				"error":  err,
+				"author": m.Author,
+			}).Error("error occured while sending a message")
+		}
 	}
-}
 
-func selectPhoto(path string) (string, error) {
-	files, err := os.ReadDir(path)
-	if err != nil {
-		return "", err
+	if len(args) == 3 && args[uploadArg] == "upload" {
+		for _, attachment := range m.Attachments {
+			if attachment.Size > c.Storage.MaxFileSize {
+				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("File size cannot be greater than %d bytes.", c.Storage.MaxFileSize))
+				return
+			}
+
+			if !c.SupportsExtension(attachment.Filename) {
+				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s files are now allowed.", filepath.Ext(attachment.Filename)))
+				return
+			}
+
+			err := s3helper.UploadObject(service, c.Storage.Bucket, c.Arguments[args[pathArg]].Path, *attachment)
+			if err != nil {
+				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("An error has occured while uploading %s.", attachment.Filename))
+				logrus.WithFields(logrus.Fields{
+					"error":  err,
+					"author": m.Author,
+					"size":   attachment.Size,
+					"file":   filepath.Join(c.Arguments[args[pathArg]].Path, attachment.Filename),
+				}).Error("error while uploading a file")
+				return
+			}
+
+			// File was succesfully uploaded
+			s.ChannelMessageSend(m.ChannelID, "File succesfully uploaded!")
+			logrus.WithFields(logrus.Fields{
+				"author": m.Author,
+				"size":   attachment.Size,
+				"file":   filepath.Join(c.Arguments[args[pathArg]].Path, attachment.Filename),
+			}).Info("file successfully uploaded")
+		}
 	}
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	num := r.Intn(len(files))
-	return files[num].Name(), nil
 }

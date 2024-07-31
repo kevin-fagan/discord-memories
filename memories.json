@@ -1,0 +1,85 @@
+{
+    "storage": {
+        "endpoint": "nyc3.digitaloceanspaces.com",
+        "region": "nyc3",
+        "bucket": "discord-memories",
+        "maxFileSize": 25000000,
+        "extensions": [
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".gif",
+            ".mp4"
+        ]
+    },
+    "arguments": {
+        "jake": {
+            "path": "jake/",
+            "enabled": true
+        },
+        "brandon": {
+            "path": "brandon/",
+            "enabled": true
+        },
+        "kevin": {
+            "path": "kevin/",
+            "enabled": true
+        },
+        "jackson": {
+            "path": "jackson/",
+            "enabled": true
+        },
+        "jazz": {
+            "path": "jazz/",
+            "enabled": true
+        },
+        "loki": {
+            "path": "loki/",
+            "enabled": true
+        },
+        "lucy": {
+            "path": "lucy/",
+            "enabled": true
+        },
+        "nimh": {
+            "path": "nimh/",
+            "enabled": true
+        },
+        "adh": {
+            "path": "adh/",
+            "description": "Bucket dedicated to the most deranged content",
+            "enabled": true
+        },
+        "r6-siege" : {
+            "path": "r6-siege/",
+            "description": "Content related to Rainbow 6 Siege",
+            "enabled": true
+        },
+        "escape-the-backrooms" : {
+            "path": "escape-the-backrooms/",
+            "description": "Content related to Escape the Backrooms",
+            "enabled": true
+        }
+    },
+    "permissions": {
+        "servers": {
+            "172589280089210880": {
+                "name": "Slayers of the Bright Realm",
+                "description": "Optional description",
+                "enabled": true
+            }
+        },
+        "channels": {
+            "1255566989963952148": {
+                "name:": "bot-testing",
+                "description": "Optional description",
+                "enabled": true
+            },
+            "172589280089210880": {
+                "name:": "seriousdiscussion",
+                "description": "Optional description",
+                "enabled": true
+            }
+        }
+    }
+}

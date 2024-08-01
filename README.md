@@ -9,7 +9,7 @@ Discord Memories is a bot that lets you upload and recall cherished moments with
 ![Screencastfrom07-31-202410_38_30PMonline-video-cutter com-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/98b52bad-5ae3-4819-8b18-bb99810a1639)
 
 ### Config Driven
-The bot is powered by a JSON configuration file, which lets you manage the types of files allowed for upload, their maximum file size, as well as custom commands and permissions. Currently, S3 is the only form of storage supported by the Discord Memories bot:
+The bot is powered by a JSON configuration file called `memories.json` located in the root directory. The configruation file lets you manage the types of files allowed for upload, their maximum file size, as well as custom commands and permissions. Currently, S3 is the only form of storage supported by the Discord Memories bot:
 
 ```json
 {

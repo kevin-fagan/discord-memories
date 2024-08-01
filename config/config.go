@@ -109,7 +109,7 @@ func (c Config) SupportsExtension(file string) bool {
 	return supported
 }
 
-// Help returns a formatted help string
+// Help returns a formatted help string based off the provided configs
 func (c Config) Help() string {
 	var sb strings.Builder
 

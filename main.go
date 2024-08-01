@@ -127,8 +127,17 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 				"error":  err,
 				"author": m.Author,
 			}).Error("error occured while sending a message")
+			return
 		}
+
+		// File succesfully sent
+		logrus.WithFields(logrus.Fields{
+			"author": m.Author,
+			"size":   *object.ContentLength,
+			"file":   filepath.Join(c.Arguments[args[firstArg]].Path, name),
+		}).Info("file sent")
 	}
+
 	// Uploading content into a "folder" defined by the first argument
 	if len(args) == 3 && args[secondArg] == "upload" {
 		for _, attachment := range m.Attachments {

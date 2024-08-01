@@ -19,8 +19,8 @@ import (
 )
 
 const (
-	pathArg    = 1
-	uploadArg  = 2
+	firstArg   = 1
+	secondArg  = 2
 	configFile = "memories.json"
 )
 
@@ -39,7 +39,6 @@ func main() {
 	if err != nil {
 		logrus.Fatalf("error creating session: %s\n", err)
 	}
-
 	service := s3.New(sess)
 	err = s3helper.Sync(service, config, config.Storage.Bucket)
 	if err != nil {
@@ -82,23 +81,29 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 	if !strings.HasPrefix(m.Content, "!memories") {
 		return
 	}
+	// Ensuring we have the correct amount of argument
 	args := strings.Split(strings.TrimSpace(m.Content), " ")
 	if len(args) != 2 && len(args) != 3 {
 		return
 	}
-	// Checking Sever/Channel permissions
-	if !c.BotAllowed(m.GuildID, m.ChannelID) {
-		s.ChannelMessageSend(m.ChannelID, "This channel or server is not allowed to use this bot.")
-		return
+	// Invoking the Help command
+	if len(args) == 2 && args[firstArg] == "help" {
+		s.ChannelMessageSend(m.ChannelID, c.Help())
 	}
-	// Checking argument permissions
-	if !c.ArgumentAllowed(args[pathArg]) {
-		s.ChannelMessageSend(m.ChannelID, "This argument is either not allowed or does not exist.")
-		return
-	}
+	// Getting random content from a "folder" defined by the first argument
+	if _, argExists := c.Arguments[args[firstArg]]; len(args) == 2 && argExists {
+		// Checking Sever/Channel permissions
+		if !c.BotAllowed(m.GuildID, m.ChannelID) {
+			s.ChannelMessageSend(m.ChannelID, "This channel or server is not allowed to use this bot.")
+			return
+		}
+		// Checking argument permissions
+		if !c.ArgumentAllowed(args[firstArg]) {
+			s.ChannelMessageSend(m.ChannelID, "This argument is either not allowed.")
+			return
+		}
 
-	if len(args) == 2 {
-		object, name, err := s3helper.GetRandomObjectUnderPrefix(service, c.Storage.Bucket, c.Arguments[args[pathArg]].Path)
+		object, name, err := s3helper.GetRandomObjectUnderPrefix(service, c.Storage.Bucket, c.Arguments[args[firstArg]].Path)
 		if err != nil {
 			s.ChannelMessageSend(m.ChannelID, err.Error())
 			logrus.WithFields(logrus.Fields{
@@ -124,8 +129,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 			}).Error("error occured while sending a message")
 		}
 	}
-
-	if len(args) == 3 && args[uploadArg] == "upload" {
+	// Uploading content into a "folder" defined by the first argument
+	if len(args) == 3 && args[secondArg] == "upload" {
 		for _, attachment := range m.Attachments {
 			if attachment.Size > c.Storage.MaxFileSize {
 				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("File size cannot be greater than %d bytes.", c.Storage.MaxFileSize))
@@ -137,14 +142,14 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 				return
 			}
 
-			err := s3helper.UploadObject(service, c.Storage.Bucket, c.Arguments[args[pathArg]].Path, *attachment)
+			err := s3helper.UploadObject(service, c.Storage.Bucket, c.Arguments[args[firstArg]].Path, *attachment)
 			if err != nil {
 				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("An error has occured while uploading %s.", attachment.Filename))
 				logrus.WithFields(logrus.Fields{
 					"error":  err,
 					"author": m.Author,
 					"size":   attachment.Size,
-					"file":   filepath.Join(c.Arguments[args[pathArg]].Path, attachment.Filename),
+					"file":   filepath.Join(c.Arguments[args[firstArg]].Path, attachment.Filename),
 				}).Error("error while uploading a file")
 				return
 			}
@@ -154,7 +159,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 			logrus.WithFields(logrus.Fields{
 				"author": m.Author,
 				"size":   attachment.Size,
-				"file":   filepath.Join(c.Arguments[args[pathArg]].Path, attachment.Filename),
+				"file":   filepath.Join(c.Arguments[args[firstArg]].Path, attachment.Filename),
 			}).Info("file successfully uploaded")
 		}
 	}

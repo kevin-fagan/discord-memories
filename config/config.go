@@ -2,8 +2,10 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -105,4 +107,17 @@ func (c Config) SupportsExtension(file string) bool {
 		}
 	}
 	return supported
+}
+
+// Help returns a formatted help string
+func (c Config) Help() string {
+	var sb strings.Builder
+
+	sb.WriteString("Help Command:\n\n")
+	sb.WriteString("!memories <command> [upload]\n\n")
+	for k, v := range c.Arguments {
+		sb.WriteString(fmt.Sprintf("- **%s**: %s\n", k, v.Description))
+	}
+
+	return sb.String()
 }

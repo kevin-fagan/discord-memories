@@ -15,35 +15,43 @@
     "arguments": {
         "jake": {
             "path": "jake/",
-            "enabled": true
+            "enabled": true,
+            "description": "Content related to Jake"
         },
         "brandon": {
             "path": "brandon/",
-            "enabled": true
+            "enabled": true,
+            "description": "Content related to Brandon"
         },
         "kevin": {
             "path": "kevin/",
-            "enabled": true
+            "enabled": true,
+            "description": "Content related to Kevin"
         },
         "jackson": {
             "path": "jackson/",
-            "enabled": true
+            "enabled": true,
+            "description": "Content related to Jackson"
         },
         "jazz": {
             "path": "jazz/",
-            "enabled": true
+            "enabled": true,
+            "description": "Content related to Jazz"
         },
         "loki": {
             "path": "loki/",
-            "enabled": true
+            "enabled": true,
+            "description": "Content related to Loki"
         },
         "lucy": {
             "path": "lucy/",
-            "enabled": true
+            "enabled": true,
+            "description": "Content related to Lucy"
         },
         "nimh": {
             "path": "nimh/",
-            "enabled": true
+            "enabled": true,
+            "description": "Content related to Nihm"
         },
         "adh": {
             "path": "adh/",

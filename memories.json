@@ -12,7 +12,7 @@
             ".mp4"
         ]
     },
-    "arguments": {
+    "commands": {
         "jake": {
             "path": "jake/",
             "enabled": true,

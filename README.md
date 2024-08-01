@@ -26,7 +26,7 @@ The bot is powered by a JSON configuration file, which lets you manage the types
             ".mp4"
         ]
     },
-    "arguments": {
+    "commands": {
         "kevin": {
             "path": "kevin/",
             "enabled": true,
@@ -52,8 +52,8 @@ The bot is powered by a JSON configuration file, which lets you manage the types
 }
 ```
 
-### Env File
-On startup, the bot will read the configuration file along with environment variables. These environment variables are source from a `.env` file. The following secrets are required:
+### Secrets
+On startup, the bot will read the configuration file along with environment variables. These environment variables are sourced from the `.env` file. The following secrets are required:
 
 ```env
 DISCORD_TOKEN=xxx

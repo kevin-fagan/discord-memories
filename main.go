@@ -92,19 +92,19 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 		// c.Help()
 	}
 	// Getting random content from a "folder" defined by the first argument
-	if _, argExists := c.Arguments[args[firstArg]]; len(args) == 2 && argExists {
+	if _, argExists := c.Commands[args[firstArg]]; len(args) == 2 && argExists {
 		// Checking Sever/Channel permissions
 		if !c.BotAllowed(m.GuildID, m.ChannelID) {
 			s.ChannelMessageSend(m.ChannelID, "This channel or server is not allowed to use this bot.")
 			return
 		}
 		// Checking argument permissions
-		if !c.ArgumentAllowed(args[firstArg]) {
+		if !c.CommandAllowed(args[firstArg]) {
 			s.ChannelMessageSend(m.ChannelID, "This argument is either not allowed.")
 			return
 		}
 
-		object, name, err := s3helper.GetRandomObjectUnderPrefix(service, c.Storage.Bucket, c.Arguments[args[firstArg]].Path)
+		object, name, err := s3helper.GetRandomObjectUnderPrefix(service, c.Storage.Bucket, c.Commands[args[firstArg]].Path)
 		if err != nil {
 			s.ChannelMessageSend(m.ChannelID, err.Error())
 			logrus.WithFields(logrus.Fields{
@@ -135,7 +135,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 		logrus.WithFields(logrus.Fields{
 			"author": m.Author,
 			"size":   *object.ContentLength,
-			"file":   filepath.Join(c.Arguments[args[firstArg]].Path, name),
+			"file":   filepath.Join(c.Commands[args[firstArg]].Path, name),
 		}).Info("file succesfully sent")
 	}
 
@@ -152,14 +152,14 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 				return
 			}
 
-			err := s3helper.UploadObject(service, c.Storage.Bucket, c.Arguments[args[firstArg]].Path, *attachment)
+			err := s3helper.UploadObject(service, c.Storage.Bucket, c.Commands[args[firstArg]].Path, *attachment)
 			if err != nil {
 				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("An error has occured while uploading %s.", attachment.Filename))
 				logrus.WithFields(logrus.Fields{
 					"error":  err,
 					"author": m.Author,
 					"size":   attachment.Size,
-					"file":   filepath.Join(c.Arguments[args[firstArg]].Path, attachment.Filename),
+					"file":   filepath.Join(c.Commands[args[firstArg]].Path, attachment.Filename),
 				}).Error("error while uploading a file")
 				return
 			}
@@ -169,7 +169,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 			logrus.WithFields(logrus.Fields{
 				"author": m.Author,
 				"size":   attachment.Size,
-				"file":   filepath.Join(c.Arguments[args[firstArg]].Path, attachment.Filename),
+				"file":   filepath.Join(c.Commands[args[firstArg]].Path, attachment.Filename),
 			}).Info("file successfully uploaded")
 		}
 	}

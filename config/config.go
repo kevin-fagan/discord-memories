@@ -13,9 +13,9 @@ import (
 
 type Config struct {
 	Tokens      Tokens
-	Storage     Storage             `json:"storage"`
-	Arguments   map[string]Argument `json:"arguments"`
-	Permissions Permissions         `json:"permissions"`
+	Storage     Storage            `json:"storage"`
+	Commands    map[string]Command `json:"commands"`
+	Permissions Permissions        `json:"permissions"`
 }
 
 type Tokens struct {
@@ -32,7 +32,7 @@ type Storage struct {
 	Extensions  []string `json:"extensions"`
 }
 
-type Argument struct {
+type Command struct {
 	Path        string `json:"path"`
 	Description string `json:"description"`
 	Enabled     bool   `json:"enabled"`
@@ -74,9 +74,9 @@ func LoadConfig(path string) (Config, error) {
 	return config, nil
 }
 
-// ArgumentAllowed checks if an argument is enabled or not
-func (c Config) ArgumentAllowed(arg string) bool {
-	argument, ok := c.Arguments[arg]
+// CommandAllowed checks if an argument is enabled or not
+func (c Config) CommandAllowed(arg string) bool {
+	argument, ok := c.Commands[arg]
 	if !ok {
 		return false
 	}
@@ -121,7 +121,7 @@ func (c Config) Help() string {
 	sb.WriteString("Commands:\n")
 
 	w := tabwriter.NewWriter(&sb, 0, 0, 4, ' ', 0)
-	for k, v := range c.Arguments {
+	for k, v := range c.Commands {
 		fmt.Fprintf(w, "\t%s\t%s\n", k, v.Description)
 	}
 	w.Flush()

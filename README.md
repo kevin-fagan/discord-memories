@@ -1,6 +1,6 @@
 # Discord Memories
 
-Discord Memories is a bot that lets you upload and recall cherished moments with your friends. Whether they are pictures, videos, gifs, or whatever file types you choose to upload! This bot is not hosted publicly, as I do not want to mange media for the public. However, feel free to fork the repo and deploy your own Discord Memories bot! 
+Discord Memories is a bot that lets you upload and recall cherished moments with your friends. Whether they are pictures, videos, gifs, or whatever file types you choose! This bot is not hosted publicly, as I do not want to mange media for the public. However, feel free to fork the repo and deploy your own Discord Memories bot! 
 
 ### Retrieving Content
 ![Screencastfrom07-31-202410_31_54PMonline-video-cutter com-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/cee508c1-e7c3-4c31-a2cc-ece5bbb3ae31)

@@ -4,6 +4,7 @@ Discord Memories is a bot that lets you upload and recall cherished moments with
 ![Screencastfrom07-31-202410_31_54PMonline-video-cutter com-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/cee508c1-e7c3-4c31-a2cc-ece5bbb3ae31)
 
 ### Uploading Content
+![Screencastfrom07-31-202410_38_30PMonline-video-cutter com-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/98b52bad-5ae3-4819-8b18-bb99810a1639)
 
 ```json
 {

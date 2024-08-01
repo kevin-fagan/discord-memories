@@ -21,7 +21,7 @@ import (
 func Sync(service *s3.S3, config config.Config, bucket string) error {
 	for _, v := range config.Commands {
 		if exists, err := ObjectExists(service, bucket, v.Path); err != nil && !exists {
-			logrus.Infof("creating %s", v.Path)
+			logrus.Infof("initializing %s", v.Path)
 			_, err := service.PutObject(&s3.PutObjectInput{
 				Bucket: aws.String(bucket),
 				Key:    aws.String(v.Path),
@@ -31,8 +31,6 @@ func Sync(service *s3.S3, config config.Config, bucket string) error {
 			if err != nil {
 				return err
 			}
-		} else {
-			logrus.Infof("%s already exists", v.Path)
 		}
 	}
 	return nil
@@ -102,7 +100,7 @@ func UploadObject(service *s3.S3, bucket, prefix string, attachment discordgo.Me
 		Bucket:        aws.String(bucket),
 		Key:           aws.String(fmt.Sprintf("%s/%s", prefix, attachment.Filename)),
 		Body:          bytes.NewReader(body),
-		ContentLength: aws.Int64(int64(attachment.Size)),
+		ContentLength: aws.Int64(int64(len(body))),
 		ContentType:   aws.String(attachment.ContentType),
 	})
 

@@ -1,5 +1,0 @@
-myhosts:
-  hosts:
-    ubuntu-s-1vcpu-1gb-nyc1-01:
-      ansible_host: 146.190.74.88
-      ansible_user: root

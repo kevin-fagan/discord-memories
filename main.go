@@ -89,6 +89,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 	// Invoking the Help command
 	if len(args) == 2 && args[firstArg] == "help" {
 		s.ChannelMessageSend(m.ChannelID, c.Help())
+		// c.Help()
 	}
 	// Getting random content from a "folder" defined by the first argument
 	if _, argExists := c.Arguments[args[firstArg]]; len(args) == 2 && argExists {
@@ -135,11 +136,11 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 			"author": m.Author,
 			"size":   *object.ContentLength,
 			"file":   filepath.Join(c.Arguments[args[firstArg]].Path, name),
-		}).Info("file sent")
+		}).Info("file succesfully sent")
 	}
 
 	// Uploading content into a "folder" defined by the first argument
-	if len(args) == 3 && args[secondArg] == "upload" {
+	if len(args) == 3 && args[secondArg] == "--upload" {
 		for _, attachment := range m.Attachments {
 			if attachment.Size > c.Storage.MaxFileSize {
 				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("File size cannot be greater than %d bytes.", c.Storage.MaxFileSize))

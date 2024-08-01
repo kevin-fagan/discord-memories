@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"text/tabwriter"
 
 	"github.com/joho/godotenv"
 )
@@ -113,11 +114,22 @@ func (c Config) SupportsExtension(file string) bool {
 func (c Config) Help() string {
 	var sb strings.Builder
 
-	sb.WriteString("Help Command:\n\n")
-	sb.WriteString("!memories <command> [upload]\n\n")
+	sb.WriteString("```\n")
+	sb.WriteString("The Discord Memories bot allows you to upload and recall memories made with your friends.\nCommands, permissions, file types, and file sizes are all determined by the Memories\nconfiguration file.\n\n")
+	sb.WriteString("Usage:\n")
+	sb.WriteString("\t !memories [command]\n\n")
+	sb.WriteString("Commands:\n")
+
+	w := tabwriter.NewWriter(&sb, 0, 0, 4, ' ', 0)
 	for k, v := range c.Arguments {
-		sb.WriteString(fmt.Sprintf("- **%s**: %s\n", k, v.Description))
+		fmt.Fprintf(w, "\t%s\t%s\n", k, v.Description)
 	}
+	w.Flush()
+
+	sb.WriteString("\n\n")
+	sb.WriteString("Flags:\n")
+	sb.WriteString("\t--upload\tAllows you to upload a file for a given command\n\n")
+	sb.WriteString("```\n")
 
 	return sb.String()
 }

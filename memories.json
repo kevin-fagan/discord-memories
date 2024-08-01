@@ -55,7 +55,7 @@
         },
         "adh": {
             "path": "adh/",
-            "description": "Bucket dedicated to the most deranged content",
+            "description": "Content dedicated to the most deranged content",
             "enabled": true
         },
         "r6-siege" : {

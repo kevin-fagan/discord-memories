@@ -2,11 +2,8 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
-	"text/tabwriter"
 
 	"github.com/joho/godotenv"
 )
@@ -74,8 +71,8 @@ func LoadConfig(path string) (Config, error) {
 	return config, nil
 }
 
-// CommandAllowed checks if an argument is enabled or not
-func (c Config) CommandAllowed(arg string) bool {
+// PrefixExists checks if an argument is enabled or not
+func (c Config) PrefixExists(arg string) bool {
 	argument, ok := c.Commands[arg]
 	if !ok {
 		return false
@@ -108,28 +105,4 @@ func (c Config) SupportsExtension(file string) bool {
 		}
 	}
 	return supported
-}
-
-// Help returns a formatted help string based off the provided configs
-func (c Config) Help() string {
-	var sb strings.Builder
-
-	sb.WriteString("```\n")
-	sb.WriteString("The Discord Memories bot allows you to upload and recall memories made with your friends.\nCommands, permissions, file types, and file sizes are all determined by the Memories\nconfiguration file.\n\n")
-	sb.WriteString("Usage:\n")
-	sb.WriteString("\t !memories [command]\n\n")
-	sb.WriteString("Commands:\n")
-
-	w := tabwriter.NewWriter(&sb, 0, 0, 4, ' ', 0)
-	for k, v := range c.Commands {
-		fmt.Fprintf(w, "\t%s\t%s\n", k, v.Description)
-	}
-	w.Flush()
-
-	sb.WriteString("\n\n")
-	sb.WriteString("Flags:\n")
-	sb.WriteString("\t--upload\tAllows you to upload a file for a given command\n\n")
-	sb.WriteString("```\n")
-
-	return sb.String()
 }

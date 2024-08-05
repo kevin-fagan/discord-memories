@@ -1,4 +1,4 @@
-package s3helper
+package storage
 
 import (
 	"bytes"

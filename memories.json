@@ -9,63 +9,74 @@
             ".jpeg",
             ".png",
             ".gif",
-            ".mp4"
+            ".mp4",
+            ".webp"
         ]
     },
     "commands": {
         "jake": {
             "path": "jake/",
             "enabled": true,
-            "description": "Content related to Jake"
+            "description": "Files related to Jake"
         },
         "brandon": {
             "path": "brandon/",
             "enabled": true,
-            "description": "Content related to Brandon"
+            "description": "Files related to Brandon"
         },
         "kevin": {
             "path": "kevin/",
             "enabled": true,
-            "description": "Content related to Kevin"
+            "description": "Files related to Kevin"
         },
         "jackson": {
             "path": "jackson/",
             "enabled": true,
-            "description": "Content related to Jackson"
+            "description": "Files related to Jackson"
         },
         "jazz": {
             "path": "jazz/",
             "enabled": true,
-            "description": "Content related to Jazz"
+            "description": "Files related to Jazz"
         },
         "loki": {
             "path": "loki/",
             "enabled": true,
-            "description": "Content related to Loki"
+            "description": "Files related to Loki"
+        },
+        "luffy": {
+            "path": "luffy/",
+            "enabled": true,
+            "description": "Files related to Luffy"
         },
         "lucy": {
             "path": "lucy/",
             "enabled": true,
-            "description": "Content related to Lucy"
+            "description": "Files related to Lucy"
         },
         "nimh": {
             "path": "nimh/",
             "enabled": true,
-            "description": "Content related to Nihm"
+            "description": "Files related to Nihm"
         },
-        "adh": {
-            "path": "adh/",
-            "description": "Content dedicated to the most deranged content",
+        "random": {
+            "path": "random/",
+            "description": "Files related to the random things",
+            "enabled": true
+        },
+        "bg3": {
+            "path": "bg3/",
+            "description": "Files related to Balders Gate 3",
             "enabled": true
         },
         "r6-siege" : {
             "path": "r6-siege/",
-            "description": "Content related to Rainbow 6 Siege",
+            "description": "Files related to Rainbow 6 Siege",
             "enabled": true
         },
         "escape-the-backrooms" : {
             "path": "escape-the-backrooms/",
-            "description": "Content related to Escape the Backrooms",
+            "description": "Files related to Escape the Backrooms",
             "enabled": true
         }
     },

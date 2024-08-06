@@ -10,27 +10,6 @@ My friends and I frequently share photos and videos on Discord, ranging from per
 
 ![Screencastfrom08-06-2024120528PM-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/37d945b3-7a84-427d-ab75-534bb9a0147e)
 
-```
-The Discord Memories bot allows you to upload and recall memories made with your friends.
-Commands, permissions, file types, and file sizes are all determined by the Memories
-configuration file.
-
-Usage:
-    !memories [command] [option]
-
-Commands:
-    help        Prints information about the Discord Memories bot
-    count       Counts the number of files under an option
-    read        Retrieves a random file under an option
-    upload      Uploads one or more files under an option
-    channels    Lists channels that have permissions to use this bot
-    servers     Lists servers that have permissions to use this bot
-
-Options:
-    loki                    Files related to loki
-    lucy                    Files related to lucy
-```
-
 ## Setup
 
 Setting up the bot is quite simple. You'll need to provide a configuration file and a few secrets. The bot uses a JSON configuration file named `memories.json`, located in the root directory. This file allows you to manage the types of files permitted for upload, their maximum size, and custom options and permissions. Currently, S3 is the only supported storage option for the Discord Memories bot.
@@ -82,7 +61,7 @@ Setting up the bot is quite simple. You'll need to provide a configuration file 
 ```
 
 #### Options
-The `options` field in `memories.json` allows you to define "buckets" where files will be stored. These options will also show up when a user invokes the `help` command.
+The `options` field in `memories.json` allows you to define "buckets" where files will be stored.
 
 ```json
 "options": {
@@ -92,6 +71,28 @@ The `options` field in `memories.json` allows you to define "buckets" where file
         "description": "Files related to Loki"
     },
 }
+```
+
+These options will also show up when a user invokes the `!memories help` command.
+
+```
+The Discord Memories bot allows you to upload and recall memories made with your friends.
+Commands, permissions, file types, and file sizes are all determined by the Memories
+configuration file.
+
+Usage:
+    !memories [command] [option]
+
+Commands:
+    help        Prints information about the Discord Memories bot
+    count       Counts the number of files under an option
+    read        Retrieves a random file under an option
+    upload      Uploads one or more files under an option
+    channels    Lists channels that have permissions to use this bot
+    servers     Lists servers that have permissions to use this bot
+
+Options:
+    loki                    Files related to loki
 ```
 
 #### Permissions

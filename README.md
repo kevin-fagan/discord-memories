@@ -2,13 +2,11 @@
 
 Discord Memories is a bot that lets you upload and recall cherished moments with your friends. Whether they are pictures, videos, gifs, or whatever file types you choose! This bot is not hosted publicly, as I do not want to mange media for the public. However, feel free to fork the repo and deploy the bot yourself, for you and your friends.
 
+![Screencastfrom08-06-2024120528PM-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/37d945b3-7a84-427d-ab75-534bb9a0147e)
+
 ## Motivation
 
 My friends and I frequently share photos and videos on Discord, ranging from personal moments and memes to inside jokes and gaming clips. We enjoy reliving these funny moments, but it can be challenging to find them. We often forget where we saved them or accidentally delete them. That's why I created this bot—it makes it easy to pull up random memories we've created over the years and share them with everyone in our Discord, making for a fun and nostalgic experience.
-
-## Demo
-
-![Screencastfrom08-06-2024120528PM-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/37d945b3-7a84-427d-ab75-534bb9a0147e)
 
 ## Setup
 
@@ -96,7 +94,7 @@ Options:
 ```
 
 #### Permissions
-The `permssions` field in `memories.json` allows you to customize permissions. You are able to allowlist which servers and/or channels you would like to allow the bot to be invoked from. Channel permissions do override Server permissions. This is useful if you want to disable a bot for an entire sever except one channel.
+The `permissions` field in `memories.json` lets you customize access settings. You can whitelist specific servers and channels where the bot can be used. Channel permissions take precedence over server permissions, which is helpful if you want to disable the bot for an entire server except for one channel.
 
 ```json
 "permissions": {

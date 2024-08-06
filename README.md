@@ -8,6 +8,8 @@ My friends and I frequently share photos and videos on Discord, ranging from per
 
 ## Demo
 
+![Screencastfrom08-06-2024120528PM-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/37d945b3-7a84-427d-ab75-534bb9a0147e)
+
 ## Config Driven
 The bot is powered by a JSON configuration file called `memories.json` located in the root directory. The configruation file lets you manage the types of files allowed for upload, their maximum file size, as well as custom commands and permissions. Currently, S3 is the only form of storage supported by the Discord Memories bot:
 

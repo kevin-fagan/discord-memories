@@ -88,7 +88,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 		return
 	}
 
-	// Ignore all messages that do not start with the command prefix
 	if !strings.HasPrefix(m.Content, "!memories") {
 		return
 	}
@@ -98,7 +97,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 		return
 	}
 
-	// Ensuring we have the correct amount of argument
 	args := strings.Split(strings.TrimSpace(m.Content), " ")
 	switch command := args[1]; command {
 	case "help":
@@ -109,5 +107,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 		cmd.Upload(s, m, c, sv, args[2:])
 	case "read":
 		cmd.Read(s, m, c, sv, args[2:])
+	case "servers":
+		cmd.Servers(s, m, c)
+	case "channels":
+		cmd.Channels(s, m, c)
 	}
 }

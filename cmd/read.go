@@ -31,7 +31,7 @@ func Read(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config, sv 
 	if err != nil {
 		logs["error"] = err
 		logrus.WithFields(logs).Error("unable to retieve object from s3")
-		s.ChannelMessageSend(m.ChannelID, err.Error())
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Error: %s", err))
 		return
 	}
 

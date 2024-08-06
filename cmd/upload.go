@@ -48,7 +48,7 @@ func Upload(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config, s
 		if err != nil {
 			logs["error"] = err
 			logrus.WithFields(logs).Error("unable to upload file")
-			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("An error has occured while uploading %s.", attachment.Filename))
+			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Error while uploading %s: %s", attachment.Filename, err))
 			return
 		}
 

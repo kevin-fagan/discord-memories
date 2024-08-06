@@ -99,20 +99,14 @@
     "permissions": {
         "servers": {
             "172589280089210880": {
-                "name": "Slayers of the Bright Realm",
-                "description": "Optional description",
                 "enabled": true
             }
         },
         "channels": {
             "1255566989963952148": {
-                "name:": "bot-testing",
-                "description": "Optional description",
                 "enabled": true
             },
             "172589280089210880": {
-                "name:": "seriousdiscussion",
-                "description": "Optional description",
                 "enabled": true
             }
         }

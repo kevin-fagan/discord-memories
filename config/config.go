@@ -41,9 +41,7 @@ type Permissions struct {
 }
 
 type Permission struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Enabled     bool   `json:"enabled"`
+	Enabled bool `json:"enabled"`
 }
 
 // LoadConfig will load the configuration file along with required environment variables

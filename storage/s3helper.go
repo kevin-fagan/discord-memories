@@ -89,6 +89,18 @@ func GetRandomObjectUnderPrefix(service *s3.S3, bucket, prefix string) (*s3.GetO
 	return o, *objectList.Contents[n].Key, err
 }
 
+// Count counts the number of objects under a prefix
+func Count(service *s3.S3, bucket, prefix string) (int, error) {
+	objectList, err := service.ListObjects(&s3.ListObjectsInput{
+		Bucket: aws.String(bucket),
+		Prefix: aws.String(prefix),
+	})
+	if err != nil {
+		return 0, err
+	}
+	return len(objectList.Contents), nil
+}
+
 // UploadObject will upload an object to the specified bucket
 func UploadObject(service *s3.S3, bucket, prefix string, attachment discordgo.MessageAttachment) error {
 	body, err := getFileBytes(attachment.URL)

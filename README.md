@@ -4,7 +4,7 @@ Discord Memories is a bot that lets you upload and recall cherished moments with
 
 ## Motivation
 
-My friends and I frequently share photos and videos on Discord, ranging from personal moments and memes to inside jokes and gaming clips. We enjoy reliving these funny moments, but it can be challenging to find them later. We often forget where we saved them or accidentally delete them. That's why I created this bot—it makes it easy to pull up random memories we've created over the years and share them with everyone in our Discord, making for a fun and nostalgic experience.
+My friends and I frequently share photos and videos on Discord, ranging from personal moments and memes to inside jokes and gaming clips. We enjoy reliving these funny moments, but it can be challenging to find them. We often forget where we saved them or accidentally delete them. That's why I created this bot—it makes it easy to pull up random memories we've created over the years and share them with everyone in our Discord, making for a fun and nostalgic experience.
 
 ## Demo
 

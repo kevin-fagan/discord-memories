@@ -6,13 +6,12 @@ import (
 	"text/tabwriter"
 
 	"github.com/KevinFagan/discord-memories/config"
-	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/bwmarrin/discordgo"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 )
 
-func Help(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config, sv *s3.S3) {
+func Help(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config) {
 	logs := logrus.Fields{
 		"author":  m.Author.Username,
 		"command": "help",
@@ -36,7 +35,7 @@ func Help(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config, sv 
 	fmt.Fprint(w, "\tservers\tLists servers that have permissions to use this bot\n")
 	fmt.Fprint(w, "\n")
 	fmt.Fprint(w, "Options:\n")
-	for k, v := range c.Commands {
+	for k, v := range c.Options {
 		fmt.Fprintf(w, "\t%s\t%s\n", k, v.Description)
 	}
 	fmt.Fprint(w, "```\n")

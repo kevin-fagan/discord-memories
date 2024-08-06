@@ -11,23 +11,23 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func Read(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config, sv *s3.S3, args []string) {
+func Read(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config, sv *s3.S3, option string) {
 	logs := logrus.Fields{
 		"author":  m.Author.Username,
 		"command": "read",
-		"prefix":  args[0],
+		"prefix":  option,
 		"uuid":    uuid.New().String(),
 	}
 
 	logrus.WithFields(logs).Info("command received")
 
-	if !c.PrefixExists(args[0]) {
-		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s does not exist.", args[0]))
+	if !c.OptionExists(option) {
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s does not exist.", option))
 		logrus.WithFields(logs).Info("prefix does not exist")
 		return
 	}
 
-	object, name, err := storage.GetRandomObjectUnderPrefix(sv, c.Storage.Bucket, c.Commands[args[0]].Path)
+	object, name, err := storage.GetRandomObjectUnderPrefix(sv, c.Storage.Bucket, c.Options[option].Path)
 	if err != nil {
 		logs["error"] = err
 		logrus.WithFields(logs).Error("unable to retieve object from s3")
@@ -43,6 +43,7 @@ func Read(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config, sv 
 			},
 		},
 	})
+
 	if err != nil {
 		logs["error"] = err
 		logrus.WithFields(logs).Error("unable to send discord message")

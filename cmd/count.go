@@ -8,11 +8,11 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func Count(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config, sv *s3.S3, args []string) {
+func Count(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config, sv *s3.S3, option string) {
 	logs := logrus.Fields{
 		"author":  m.Author.Username,
 		"command": "count",
-		"prefix":  args[0],
+		"prefix":  option,
 		"uuid":    uuid.New().String(),
 	}
 

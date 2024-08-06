@@ -19,7 +19,7 @@ import (
 // Sync will ensure to create all the necessary "folders" defined within
 // the memories config file. If the "folders" already exist, the creation process will be skipped
 func Sync(service *s3.S3, config config.Config, bucket string) error {
-	for _, v := range config.Commands {
+	for _, v := range config.Options {
 		if exists, err := ObjectExists(service, bucket, v.Path); err != nil && !exists {
 			logrus.Infof("initializing %s", v.Path)
 			_, err := service.PutObject(&s3.PutObjectInput{

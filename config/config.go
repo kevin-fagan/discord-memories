@@ -10,9 +10,9 @@ import (
 
 type Config struct {
 	Tokens      Tokens
-	Storage     Storage            `json:"storage"`
-	Commands    map[string]Command `json:"commands"`
-	Permissions Permissions        `json:"permissions"`
+	Storage     Storage           `json:"storage"`
+	Options     map[string]Option `json:"options"`
+	Permissions Permissions       `json:"permissions"`
 }
 
 type Tokens struct {
@@ -29,7 +29,7 @@ type Storage struct {
 	Extensions  []string `json:"extensions"`
 }
 
-type Command struct {
+type Option struct {
 	Path        string `json:"path"`
 	Description string `json:"description"`
 	Enabled     bool   `json:"enabled"`
@@ -71,9 +71,9 @@ func LoadConfig(path string) (Config, error) {
 	return config, nil
 }
 
-// PrefixExists checks if an argument is enabled or not
-func (c Config) PrefixExists(arg string) bool {
-	argument, ok := c.Commands[arg]
+// OptionExists checks if an argument is enabled or not
+func (c Config) OptionExists(arg string) bool {
+	argument, ok := c.Options[arg]
 	if !ok {
 		return false
 	}

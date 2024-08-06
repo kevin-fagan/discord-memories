@@ -20,6 +20,8 @@ import (
 )
 
 const (
+	command    = 1
+	option     = 2
 	configFile = "memories.json"
 )
 
@@ -87,29 +89,39 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate, c config.Co
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
-
 	if !strings.HasPrefix(m.Content, "!memories") {
 		return
 	}
-
 	if !c.BotAllowed(m.GuildID, m.ChannelID) {
 		s.ChannelMessageSend(m.ChannelID, "This Discord Server or Channel does not have permissions to run this bot.")
 		return
 	}
 
 	args := strings.Split(strings.TrimSpace(m.Content), " ")
-	switch command := args[1]; command {
-	case "help":
-		cmd.Help(s, m, c, sv)
-	case "count":
-		cmd.Count(s, m, c, sv, args[2:])
-	case "upload":
-		cmd.Upload(s, m, c, sv, args[2:])
-	case "read":
-		cmd.Read(s, m, c, sv, args[2:])
-	case "servers":
-		cmd.Servers(s, m, c)
-	case "channels":
-		cmd.Channels(s, m, c)
+
+	if len(args) == 1 {
+		cmd.Help(s, m, c)
+		return
 	}
+	if args[command] == "count" && len(args) == 3 {
+		cmd.Count(s, m, c, sv, args[option])
+		return
+	}
+	if args[command] == "upload" && len(args) == 3 {
+		cmd.Upload(s, m, c, sv, args[option])
+		return
+	}
+	if args[command] == "read" && len(args) == 3 {
+		cmd.Read(s, m, c, sv, args[option])
+		return
+	}
+	if args[command] == "servers" && len(args) == 2 {
+		cmd.Servers(s, m, c)
+		return
+	}
+	if args[command] == "channels" && len(args) == 2 {
+		cmd.Channels(s, m, c)
+		return
+	}
+	cmd.Help(s, m, c)
 }

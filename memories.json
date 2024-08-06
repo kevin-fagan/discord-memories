@@ -10,10 +10,11 @@
             ".png",
             ".gif",
             ".mp4",
-            ".webp"
+            ".webp",
+            ".mov"
         ]
     },
-    "commands": {
+    "options": {
         "jake": {
             "path": "jake/",
             "enabled": true,
@@ -77,6 +78,21 @@
         "escape-the-backrooms" : {
             "path": "escape-the-backrooms/",
             "description": "Files related to Escape the Backrooms",
+            "enabled": true
+        },
+        "jason": {
+            "path": "jason/",
+            "description": "Files related to Jason",
+            "enabled": true
+        },
+        "adam": {
+            "path": "adam/",
+            "description": "Files related to Adam",
+            "enabled": true
+        },
+        "tallon": {
+            "path": "tallon/",
+            "description": "Files related to Tallon",
             "enabled": true
         }
     },

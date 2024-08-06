@@ -12,19 +12,19 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func Upload(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config, sv *s3.S3, args []string) {
+func Upload(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config, sv *s3.S3, option string) {
 	logs := logrus.Fields{
 		"author":  m.Author.Username,
 		"command": "upload",
-		"prefix":  args[0],
+		"prefix":  option,
 		"uuid":    uuid.New().String(),
 	}
 
 	logrus.WithFields(logs).Info("command received")
 
-	if !c.PrefixExists(args[0]) {
-		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s does not exist.", args[0]))
+	if !c.OptionExists(option) {
 		logrus.WithFields(logs).Info("prefix does not exist")
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s does not exist.", option))
 		return
 	}
 
@@ -33,26 +33,26 @@ func Upload(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config, s
 		logs["size"] = attachment.Size
 
 		if attachment.Size > c.Storage.MaxFileSize {
-			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("File size cannot be greater than %d bytes.", c.Storage.MaxFileSize))
 			logrus.WithFields(logs).Info("uploaded rejected due to file size being too large")
+			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("File size cannot be greater than %d bytes.", c.Storage.MaxFileSize))
 			return
 		}
 
 		if !c.SupportsExtension(attachment.Filename) {
-			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s files are not allowed.", filepath.Ext(attachment.Filename)))
 			logrus.WithFields(logs).Info("uploaded rejected due to file type")
+			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s files are not allowed.", filepath.Ext(attachment.Filename)))
 			return
 		}
 
-		err := storage.UploadObject(sv, c.Storage.Bucket, c.Commands[args[0]].Path, *attachment)
+		err := storage.UploadObject(sv, c.Storage.Bucket, c.Options[option].Path, *attachment)
 		if err != nil {
-			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("An error has occured while uploading %s.", attachment.Filename))
 			logs["error"] = err
 			logrus.WithFields(logs).Error("unable to upload file")
+			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("An error has occured while uploading %s.", attachment.Filename))
 			return
 		}
 
-		s.ChannelMessageSend(m.ChannelID, "File succesfully uploaded!")
 		logrus.WithFields(logs).Info("file uploaded")
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s uploaded.", attachment.Filename))
 	}
 }

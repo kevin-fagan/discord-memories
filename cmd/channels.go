@@ -20,7 +20,6 @@ func Channels(s *discordgo.Session, m *discordgo.MessageCreate, c config.Config)
 	logrus.WithFields(logs).Info("command received")
 
 	var sb strings.Builder
-
 	sb.WriteString("Channel allowlist:\n")
 	for k := range c.Permissions.Channels {
 		st, _ := s.Channel(k)
